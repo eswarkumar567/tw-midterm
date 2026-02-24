@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: rgb(179, 171, 171);
+        }
+         #itemd1{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 100%;
+        }
+         #itemd1 div{
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid;
+            border-radius: 10px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        #aboutItem{
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center; /* fixed */
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* added */
+        }
+        #aboutItemContent{
+    position: relative;  
+}
+#aboutItemContent button{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+   #aboutItemContent{
+            width: 300px;
+            background-color: white;
+            padding:20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="itemd1"></div>
+    <script>
+        function itemDisplay(products) {
+            products.forEach(function(product){
+                var itemDiv = document.createElement("div");
+                var itemImage = document.createElement("img");
+                itemImage.src = product.thumbnail;
+                itemImage.style.width = "100px";
+                itemImage.onclick = function(){
+                    var aboutItem = document.createElement("div");
+                    aboutItem.id= "aboutItem";
+                    var aboutItemContent = document.createElement("div");
+                    aboutItemContent.id = "aboutItemContent";
+                    var aboutItemimage = document.createElement("img");
+                    aboutItemimage.src = product.thumbnail;
+                    aboutItemimage.style.width = "150px";
+                    aboutItemContent.appendChild(aboutItemimage);
+                    var aboutItemName = document.createElement("h2");
+                    aboutItemName.textContent = product.title;
+                    aboutItemContent.appendChild(aboutItemName);
+                    var aboutItemDescription = document.createElement("p");
+                    aboutItemDescription.textContent = product.description;
+                    aboutItemContent.appendChild(aboutItemDescription);
+                    var closeBtn = document.createElement("button");
+                    closeBtn.textContent = "X";
+                    closeBtn.onclick = function(){ 
+                        aboutItem.remove(); 
+                    };
+                    aboutItemContent.appendChild(closeBtn);
+                    aboutItem.appendChild(aboutItemContent);
+                    document.body.appendChild(aboutItem);
+                }
+                itemDiv.onclick = function(){
+                    itemImage.click();
+                }
+                itemDiv.appendChild(itemImage);
+                var itemName = document.createElement("h2");
+                itemName.textContent = product.title;
+                itemDiv.appendChild(itemName);
+                document.getElementById("itemd1").appendChild(itemDiv);
+            })
+        }
+        function getProducts(){
+            fetch("https://dummyjson.com/products")
+            .then(function (res) { return res.json() })
+            .then(function (data) { itemDisplay(data.products) })
+        }
+        getProducts();
+    </script>
+</body>
+</html>
