@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipes Table</title>
+</head>
+<body>
+
+<h2>Recipes List</h2>
+
+<button onclick="nextPage()">Next 10</button>
+<button onclick="prevPage()">Prev 10</button>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Calories</th>
+            <th>Preparation Time</th>
+            <th>Cooking Time</th>
+            <th>Rating</th>
+        </tr>
+    </thead>
+    <tbody id="body"></tbody>
+</table>
+
+<script>
+var eshu = [];
+var start = 0;
+
+function getData() {
+    fetch("https://dummyjson.com/recipes")
+    .then(function(res) {
+        return res.json();
+    })
+    .then(function(data) {
+        eshu = data.recipes;
+        showData();
+    });
+}
+
+function showData() {
+
+    var body = document.getElementById("body");
+    body.innerHTML = "";
+
+    for (var i = start; i < start + 10 && i < eshu.length; i++) {
+
+        var row = document.createElement("tr");
+
+        var c1 = document.createElement("td");
+        c1.innerText = eshu[i].name;
+
+        var c2 = document.createElement("td");
+        c2.innerText = eshu[i].caloriesPerServing;
+
+        var c3 = document.createElement("td");
+        c3.innerText = eshu[i].prepTimeMinutes + " min";
+
+        var c4 = document.createElement("td");
+        c4.innerText = eshu[i].cookTimeMinutes + " min";
+
+        var c5 = document.createElement("td");
+        c5.innerText = eshu[i].rating;
+
+        row.appendChild(c1);
+        row.appendChild(c2);
+        row.appendChild(c3);
+        row.appendChild(c4);
+        row.appendChild(c5);
+
+        body.appendChild(row);
+    }
+}
+
+function nextPage() {
+    start = start + 10;
+    showData();
+}
+
+function prevPage() {
+    start = start - 10;
+    if (start < 0) {
+        start = 0;
+    }
+    showData();
+}
+
+getData();
+</script>
+
+</body>
+</html>
